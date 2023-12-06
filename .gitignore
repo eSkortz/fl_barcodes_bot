@@ -1,5 +1,4 @@
 *temp_files
-config.py
 __pycache__/
 .vscode/
 .DS_Store
