@@ -17,4 +17,4 @@ python main.py
 ```
 
 Дополнительные материалы
-- Документация aiogram (https://docs.aiogram.dev/)
+- [Документация aiogram](https://docs.aiogram.dev/)
