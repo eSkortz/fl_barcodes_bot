@@ -10,15 +10,17 @@ import aiohttp
 from docx import Document
 from docx.shared import Pt
 
-
+# Создаем экземпляр роутера и бота
 router = Router()
 bot = Bot(token=BOT_TOKEN)
 
 
+# Определение состояний для finite state machine (FSM)
 class Patterns(StatesGroup):
     waiting_to_id = State()
 
 
+# Функция обработки ошибок
 async def sth_error(message: Message, error_text: str) -> None:
     await message.delete()
     markup_inline = only_to_main_k.get()
@@ -28,6 +30,7 @@ async def sth_error(message: Message, error_text: str) -> None:
     )
 
 
+# Обработчик для основного меню
 @router.callback_query(F.data == "main_menu")
 async def main_menu(callback: CallbackQuery) -> None:
     try:
@@ -35,12 +38,13 @@ async def main_menu(callback: CallbackQuery) -> None:
         await callback.message.delete()
         await callback.message.answer(
             text="🤖 Привет, я бот для получения баркодов в формате docx",
-                reply_markup=markup_inline,
-            )
+            reply_markup=markup_inline,
+        )
     except Exception as exception:
         await sth_error(callback.message, exception)
 
 
+# Обработчик для запроса генерации кодов
 @router.callback_query(F.data == "get_patterns")
 async def generate(callback: CallbackQuery, state: FSMContext) -> None:
     try:
@@ -54,6 +58,7 @@ async def generate(callback: CallbackQuery, state: FSMContext) -> None:
         await sth_error(callback.message, exception)
 
 
+# Обработчик ввода количества кодов
 @router.message(Patterns.waiting_to_id)
 async def waiting_to_message(message: Message, state: FSMContext) -> None:
     try:
@@ -80,15 +85,15 @@ async def waiting_to_message(message: Message, state: FSMContext) -> None:
             docx_file = FSInputFile(f"{filename}")
             markup_inline = only_to_main_k.get()
             await message.answer_document(
-                document=docx_file,
-                reply_markup = markup_inline
+                document=docx_file, reply_markup=markup_inline
             )
-            os.remove(f'{filename}')
+            os.remove(f"{filename}")
 
     except Exception as exception:
         await sth_error(message, exception)
 
 
+# Функция генерации случайных кодов
 def generate_codes(count: int) -> list:
     codes = []
     for _ in range(count):
@@ -97,19 +102,20 @@ def generate_codes(count: int) -> list:
     return codes
 
 
+# Функция сохранения кодов в docx файл
 def save_codes_to_docx(codes: list) -> str:
     doc = Document()
-    doc.styles['Normal'].font.size = Pt(21)
-    doc.styles['Normal'].font.bold = True
+    doc.styles["Normal"].font.size = Pt(21)
+    doc.styles["Normal"].font.bold = True
     for code in codes:
         doc.add_paragraph(code)
-        doc.add_paragraph('------------------------------------------------------')
-    filename = f'{str(uuid.uuid4())}.docx'
+        doc.add_paragraph("------------------------------------------------------")
+    filename = f"{str(uuid.uuid4())}.docx"
     doc.save(filename)
     return filename
 
 
-
+# Функция отправки кодов по указанному URL
 async def send_codes_to_url(codes: list, url: str) -> list:
     async with aiohttp.ClientSession() as session:
         responses = []
