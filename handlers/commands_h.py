@@ -9,30 +9,20 @@ router = Router()
 
 @router.message(Command("start"))
 async def start_command(message: Message) -> None:
-    """функция для отработки команды start
-
-    Args:
-        message (Message): сообщение пользователя с командой
-    """
     if message.chat.id in USERS_WHITELIST:
         markup_inline = start_k.get()
         await message.answer(
             text=(
-                "🤖 Привет, я бот для получения баркодов в формате docx"
+                "🤖 Привет, я бот созданный для помощи при работе с баркодами. "
+                + "Я могу помочь вам создать баркоды, удалить их или просмотреть "
+                + "статистику по имеющимся баркодам"
             ),
-            reply_markup=markup_inline
+            reply_markup=markup_inline,
         )
     else:
-        await message.answer('⛔️ Извините, у вас нет доступа')
+        await message.answer("⛔️ Извините, у вас нет доступа")
 
 
 @router.message(Command("recipient"))
 async def recipient_command(message: Message) -> None:
-    """функция для получения id пользователя
-    для последующего его добавления в whitelist 
-    в config
-
-    Args:
-        message (Message): сообщение пользователя с командой
-    """
     await message.reply(f"{message.chat.id}")
