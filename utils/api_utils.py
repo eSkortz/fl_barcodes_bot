@@ -6,7 +6,7 @@ async def get_token() -> dict:
     async with aiohttp.ClientSession() as session:
         body = {"code": f"{LOGIN_CODE}"}
         async with session.post(
-            url=f"{API_URL}/auth/login", headers=headers, json=body
+            url=f"{API_URL}/auth/login", json=body
         ) as response:
             response = await response.json()
             headers = {"Authorization": response["token"]}
