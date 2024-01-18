@@ -84,7 +84,7 @@ async def waiting_to_message(message: Message, state: FSMContext) -> None:
             await message.answer_document(
                 document=docx_file,
                 reply_markup=markup_inline,
-                caption="📄 Сгенерированные коды - в прикреплённом ниже файле",
+                caption="📄 Сгенерированные коды - в прикреплённом файле",
             )
             os.remove(f"{filename}")
 
@@ -137,7 +137,7 @@ async def waiting_to_message(message: Message, state: FSMContext) -> None:
             await message.answer_document(
                 document=docx_file,
                 reply_markup=markup_inline,
-                caption="📄 Сгенерированные коды - в прикреплённом ниже файле",
+                caption="📄 Сгенерированные коды - в прикреплённом файле",
             )
             os.remove(f"{filename}")
 
