@@ -9,8 +9,8 @@ async def get_token() -> dict:
             url=f"{API_URL}/auth/login", headers=headers, json=body
         ) as response:
             response = await response.json()
-    headers = {"Authorization": response["token"]}
-    return headers
+            headers = {"Authorization": response["token"]}
+            return headers
 
 
 async def create_codes(codes: list) -> dict:
