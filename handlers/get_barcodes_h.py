@@ -25,12 +25,12 @@ async def get_barcodes_menu(callback: CallbackQuery) -> None:
         await callback.message.answer(
             text=(
                 "🔎 Выберите опцию.\n\n"
-                + "При выборе опции '🗂 Посмотреть все баркоды' - "
-                + "вы получите динамический список всех баркодов, "
+                + "При выборе опции '🗂 Посмотреть все коды' - "
+                + "вы получите динамический список всех кодов, "
                 + "зарегестрированных в системе.\n\nПри выборе опции "
-                + "'📰 Информация об определенном баркоде' - вам нужно будет "
+                + "'📰 Информация об определенном коде' - вам нужно будет "
                 + "ввести его значение в сообщении и в случае, если такой "
-                + "баркод зарегестрирован в системе, - вам будет "
+                + "код зарегестрирован в системе, - вам будет "
                 + "выведена информация по нему"
             ),
             reply_markup=markup_inline,
@@ -44,7 +44,7 @@ async def get_code_from_message(callback: CallbackQuery, state: FSMContext) -> N
     try:
         await callback.message.delete()
         message = await callback.message.answer(
-            text="🛎 Пришлите баркод, по которому хотите получить информацию"
+            text="🛎 Пришлите String Art код, по которому хотите получить информацию"
         )
         await state.set_state(GetBarcodes.waiting_to_code)
         await state.update_data(id_to_delete=message.message_id)
@@ -70,7 +70,7 @@ async def processing_message_code(message: Message, state: FSMContext) -> None:
         if finded_code is not None:
             markup_inline = only_to_list_k.get(value=finded_code["value"])
             text = (
-                "📰 Информация по баркоду:\n\n"
+                "📰 Информация по String Art коду:\n\n"
                 + f"id: {finded_code['id']}\n"
                 + f"Кол-во использований: {finded_code['timesUsed']}\n"
                 + f"Значение: {finded_code['value']}"
@@ -94,7 +94,7 @@ async def get_codes_list(callback: CallbackQuery, state: FSMContext) -> None:
 
         await callback.message.answer(
             text=(
-                f"🗂 Список зарегистрированных баркодов (стр. "
+                f"🗂 Список зарегистрированных String Art кодов (стр. "
                 + f"{page//10+1}/{len(codes)//10+1 if len(codes)%10!=0 else len(codes)//10})"
             ),
             reply_markup=markup_inline,
@@ -118,7 +118,7 @@ async def get_codes_list(callback: CallbackQuery) -> None:
         if finded_code is not None:
             markup_inline = only_to_list_k.get(value=finded_code["value"])
             text = (
-                "📰 Информация по баркоду:\n\n"
+                "📰 Информация по String Art коду:\n\n"
                 + f"id: {finded_code['id']}\n"
                 + f"Кол-во использований: {finded_code['timesUsed']}\n"
                 + f"Значение: {finded_code['value']}"

@@ -28,12 +28,12 @@ async def generate(callback: CallbackQuery) -> None:
         await callback.message.answer(
             text=(
                 "🔎 Выберите опцию.\n\n"
-                + "В случае выбора опции '🎲 Создать случайные баркоды' - "
-                + "вам будет необходимо только задать их кол-во, сами баркоды "
+                + "В случае выбора опции '🎲 Создать случайные коды' - "
+                + "вам будет необходимо только задать их кол-во, сами коды "
                 + "будут сгенерированы рандомно с помощью алгоритма\n\n"
-                + "В случае выбора опции '📝 Создать определенные баркоды' - вы должны будете "
-                + "отправить сообщением все необходимые баркоды, разделив их запятой.\n\n"
-                + "В ответ вы получите сообщение с docx-файлом, содержащим созданные вами баркоды"
+                + "В случае выбора опции '📝 Создать определенные коды' - вы должны будете "
+                + "отправить сообщением все необходимые коды, разделив их запятой.\n\n"
+                + "В ответ вы получите сообщение с docx-файлом, содержащим созданные вами коды"
             ),
             reply_markup=markup_inline,
         )
@@ -45,8 +45,10 @@ async def generate(callback: CallbackQuery) -> None:
 async def generate(callback: CallbackQuery, state: FSMContext) -> None:
     try:
         await callback.message.delete()
+        markup_inline = only_to_main_k.get()
         message = await callback.message.answer(
-            text="🛎 Пришлите мне кол-во кодов, которое необходимо сгенерировать"
+            text="🛎 Пришлите мне кол-во String Art кодов, которое необходимо сгенерировать",
+            reply_markup=markup_inline
         )
         await state.set_state(CreateBarcodes.waiting_to_amount)
         await state.update_data(id_to_delete=message.message_id)
@@ -75,7 +77,7 @@ async def waiting_to_message(message: Message, state: FSMContext) -> None:
             count = int(message_text)
             codes = generate_codes(count)
             await create_codes(codes=codes)
-            filename = save_codes_to_docx(codes)
+            filename = save_codes_to_docx(codes, message.chat.id)
 
             docx_file = FSInputFile(f"{filename}")
             markup_inline = only_to_main_k.get()
@@ -92,8 +94,10 @@ async def waiting_to_message(message: Message, state: FSMContext) -> None:
 async def generate(callback: CallbackQuery, state: FSMContext) -> None:
     try:
         await callback.message.delete()
+        markup_inline = only_to_main_k.get()
         message = await callback.message.answer(
-            text="🛎 Пришлите мне коды для создания через запятую"
+            text="🛎 Пришлите мне String Art коды для создания через запятую",
+            reply_markup=markup_inline
         )
         await state.set_state(CreateBarcodes.waiting_to_list)
         await state.update_data(id_to_delete=message.message_id)
@@ -124,7 +128,7 @@ async def waiting_to_message(message: Message, state: FSMContext) -> None:
             )
         else:
             await create_codes(codes=codes)
-            filename = save_codes_to_docx(codes)
+            filename = save_codes_to_docx(codes, message.chat.id)
 
             docx_file = FSInputFile(f"{filename}")
             markup_inline = only_to_main_k.get()

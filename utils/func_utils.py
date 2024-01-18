@@ -11,13 +11,13 @@ def generate_codes(count: int) -> list:
     return codes
 
 
-def save_codes_to_docx(codes: list) -> str:
+def save_codes_to_docx(codes: list, user_id: int) -> str:
     doc = Document()
     doc.styles["Normal"].font.size = Pt(21)
     doc.styles["Normal"].font.bold = True
     for code in codes:
         doc.add_paragraph(code)
         doc.add_paragraph("------------------------------------------------------")
-    filename = f"{str(uuid.uuid4())}.docx"
+    filename = f"codes_{user_id}.docx"
     doc.save(filename)
     return filename

@@ -22,8 +22,10 @@ class DeleteBarcodes(StatesGroup):
 async def generate(callback: CallbackQuery, state: FSMContext) -> None:
     try:
         await callback.message.delete()
+        markup_inline = only_to_main_k.get()
         message = await callback.message.answer(
-            text="🗑 Пришлите мне коды для удаления через запятую"
+            text="🗑 Пришлите мне String Art коды для удаления через запятую",
+            reply_markup=markup_inline,
         )
         await state.set_state(DeleteBarcodes.waiting_to_list)
         await state.update_data(id_to_delete=message.message_id)
@@ -56,24 +58,23 @@ async def waiting_to_message(message: Message, state: FSMContext) -> None:
             await delete_codes(codes=codes)
             markup_inline = only_to_main_k.get()
             await message.answer(
-                text="✅ Коды успешно удалены", reply_markup=markup_inline
+                text="✅ String Art коды успешно удалены", reply_markup=markup_inline
             )
 
     except Exception as exception:
         await sth_error(message, exception)
 
-    
+
 @router.callback_query(F.data.startswith("delete_barcode_by_value"))
 async def generate(callback: CallbackQuery) -> None:
     try:
-        value = callback.data.split('|')[1]
+        value = callback.data.split("|")[1]
         await delete_codes(codes=[value])
-
         markup_inline = only_to_main_k.get()
         await callback.message.delete()
         await callback.message.answer(
-            text="✅ Код успешно удален из базы данных",
-            reply_markup=markup_inline
+            text="✅ String Art код успешно удален из базы данных",
+            reply_markup=markup_inline,
         )
     except Exception as exception:
         await sth_error(callback.message, exception)
