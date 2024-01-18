@@ -7,12 +7,12 @@ def get() -> ReplyKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.row(
         types.InlineKeyboardButton(
-            text="🎲 Создать случайные баркоды", callback_data=f"create_random_barcodes"
+            text="🎲 Создать случайные коды", callback_data=f"create_random_barcodes"
         )
     )
     builder.row(
         types.InlineKeyboardButton(
-            text="📝 Создать определенные баркоды",
+            text="📝 Создать определенные коды",
             callback_data=f"create_barcodes_by_list",
         )
     )

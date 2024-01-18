@@ -7,12 +7,12 @@ def get(value: str) -> ReplyKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.row(
         types.InlineKeyboardButton(
-            text="🗑 Удалить баркод", callback_data=f"delete_barcode_by_value|{value}"
+            text="🗑 Удалить код", callback_data=f"delete_barcode_by_value|{value}"
         )
     )
     builder.row(
         types.InlineKeyboardButton(
-            text="🔙 К списку баркодов", callback_data="get_all_barcodes|0"
+            text="🔙 К списку кодов", callback_data="get_all_barcodes|0"
         )
     )
     return builder.as_markup(resize_keyboard=True)
