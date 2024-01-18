@@ -14,16 +14,20 @@ def get(codes: list, page: int) -> ReplyKeyboardMarkup:
                 callback_data=f"get_barcode_info|{code['id']}",
             )
         )
-    builder.row(
-        types.InlineKeyboardButton(
-            text="⬅️ Назад",
-            callback_data=f"get_all_barcodes|{page - 10 if page != 0 else 0}",
-        ),
-        types.InlineKeyboardButton(
-            text="Вперед ➡️",
-            callback_data=f"get_all_barcodes|{page + 10 if page + 10 < len(codes) else page}",
-        ),
-    )
+    if page != 0:
+        builder.row(
+            types.InlineKeyboardButton(
+                text="⬅️ Назад",
+                callback_data=f"get_all_barcodes|{page - 10}",
+            ),
+        )
+    if page + 10 < len(codes):
+        builder.row(
+            types.InlineKeyboardButton(
+                text="Вперед ➡️",
+                callback_data=f"get_all_barcodes|{page + 10}",
+            ),
+        )
     builder.row(
         types.InlineKeyboardButton(text="🔙 В главное меню", callback_data="main_menu")
     )

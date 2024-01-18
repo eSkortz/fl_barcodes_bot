@@ -48,7 +48,7 @@ async def generate(callback: CallbackQuery, state: FSMContext) -> None:
         markup_inline = only_to_main_k.get()
         message = await callback.message.answer(
             text="🛎 Пришлите мне кол-во String Art кодов, которое необходимо сгенерировать",
-            reply_markup=markup_inline
+            reply_markup=markup_inline,
         )
         await state.set_state(CreateBarcodes.waiting_to_amount)
         await state.update_data(id_to_delete=message.message_id)
@@ -82,7 +82,9 @@ async def waiting_to_message(message: Message, state: FSMContext) -> None:
             docx_file = FSInputFile(f"{filename}")
             markup_inline = only_to_main_k.get()
             await message.answer_document(
-                document=docx_file, reply_markup=markup_inline
+                document=docx_file,
+                reply_markup=markup_inline,
+                caption="📄 Сгенерированные коды - в прикреплённом ниже файле",
             )
             os.remove(f"{filename}")
 
@@ -97,7 +99,7 @@ async def generate(callback: CallbackQuery, state: FSMContext) -> None:
         markup_inline = only_to_main_k.get()
         message = await callback.message.answer(
             text="🛎 Пришлите мне String Art коды для создания через запятую",
-            reply_markup=markup_inline
+            reply_markup=markup_inline,
         )
         await state.set_state(CreateBarcodes.waiting_to_list)
         await state.update_data(id_to_delete=message.message_id)
@@ -133,7 +135,9 @@ async def waiting_to_message(message: Message, state: FSMContext) -> None:
             docx_file = FSInputFile(f"{filename}")
             markup_inline = only_to_main_k.get()
             await message.answer_document(
-                document=docx_file, reply_markup=markup_inline
+                document=docx_file,
+                reply_markup=markup_inline,
+                caption="📄 Сгенерированные коды - в прикреплённом ниже файле",
             )
             os.remove(f"{filename}")
 
